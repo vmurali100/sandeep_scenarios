@@ -1,22 +1,5 @@
 const initialState={
-    users:[
-        {
-            "fname": "Kerrissa",
-            "lname": "Stilwell"
-        },
-        {
-            "fname": "Mario",
-            "lname": "Ellingwood"
-        },
-        {
-            "fname": "Sharad",
-            "lname": "Marton"
-        },
-        {
-            "fname": "Juan",
-            "lname": "Bryson"
-        }
-    ]
+    users:[ ]
 }
 export const rootReducer=(state=initialState,action)=>{
     switch (action.type) {
