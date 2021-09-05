@@ -1,73 +1,119 @@
 import React, { useState } from "react";
+import { returnCheckBoxValues, returnGenderValues, returnUser } from "./utils";
 
 export const Users = () => {
   const [showModal, setshowModal] = useState(false);
-  const [user, setUser] = useState({
-    email:"",
-    password:"",
-    state:"",
-    date:"",
-    gender:"",
-    subjects:[]
-  })
-  const [checkBoxes, setcheckBoxes] = useState([
-    {name:"HTML",isChecked:false},
-    {name:"CSS",isChecked:false},
-    {name:"Javascript",isChecked:false},
-    {name:"ReactJS",isChecked:false}])
-    // const [radioButtons, setradioButtons] = useState()
-  let {email,password,state,date,gender,subjects} = user
+  const [user, setUser] = useState(returnUser());
+  const [checkBoxes, setcheckBoxes] = useState(returnCheckBoxValues());
+
+  const [gendervalues, setgendervalues] = useState(returnGenderValues());
+  const [isInvalid, setisInvalid] = useState(true)
+  let { email, password, state, date, gender, subjects } = user;
   const adduser = () => {
     setshowModal(true);
   };
   const closeModal = () => {
     setshowModal(false);
   };
-  const hanldeChange = (e)=>{
-    let newUser={...user}
-    newUser[e.target.name] = e.target.value
-    setUser(newUser)
-  }
-  const handleCheckChange=(e)=>{
-    var allCheckBoxes = [...checkBoxes]
-    allCheckBoxes.forEach(cbox=>{
-        if(cbox.name == e.target.value){
-          if(!cbox.isChecked){
-            cbox.isChecked=true
-          }else{
-            cbox.isChecked=false
-          }
-
-        }
-      
-    })
-    setcheckBoxes(allCheckBoxes)
-   
-  }
-
-  const handleSubmit=()=>{
+  const validate = () =>{
+    let valid = true
     let newUser = {...user}
-    checkBoxes.forEach((e)=>{
-      if(e.isChecked){
-        newUser.subjects.push(e.name)
+
+    for(let a in newUser){
+      if(a !== "subjects"){
+        if(newUser[a]===""){
+          valid=false
+        }
+      }else if(a === "subjects"){
+        if(newUser[a].length === 0){
+          valid=false
+        }
       }
-    })
-    setUser(newUser)
-    console.log(user)
-    setUser({
-      email:"",
-      password:"",
-      state:"",
-      date:"",
-      gender:"",
-      subjects:[]
-    })
-    setcheckBoxes([
-      {name:"HTML",isChecked:false},
-      {name:"CSS",isChecked:false},
-      {name:"Javascript",isChecked:false},
-      {name:"ReactJS",isChecked:false}])
+    }
+    if(valid){
+      setisInvalid(false)
+    }else{
+      setisInvalid(true)
+    }
+
   }
+  const hanldeChange = (e) => {
+    let newUser = { ...user };
+    newUser[e.target.name] = e.target.value;
+    validate()
+    setUser(newUser);
+  };
+  const handleCheckChange = (e) => {
+    var allCheckBoxes = [...checkBoxes];
+    allCheckBoxes.forEach((cbox) => {
+      if (cbox.name === e.target.value) {
+        if (!cbox.isChecked) {
+          cbox.isChecked = true;
+        } else {
+          cbox.isChecked = false;
+        }
+      }
+    });
+    setcheckBoxes(allCheckBoxes);
+    let newUser = { ...user };
+
+    checkBoxes.forEach((e) => {
+      if (e.isChecked) {
+        newUser.subjects.push(e.name);
+      }
+    });
+    setUser(newUser);
+
+    validate()
+  };
+
+  const handleSubmit = () => {
+    let newUser = { ...user };
+    checkBoxes.forEach((e) => {
+      if (e.isChecked) {
+        newUser.subjects.push(e.name);
+      }
+    });
+    gendervalues.forEach((gender) => {
+      if (gender.isChecked) {
+        newUser.gender = gender.name;
+      }
+    });
+
+    setUser(newUser);
+    console.log(user);
+    // Will Clear the form  .. to be triggered after the action
+    setUser(returnUser());
+
+    // Will Clear the Gender values
+    setgendervalues(returnGenderValues());
+
+    //Will Clear Checkbox Values
+    setcheckBoxes(returnCheckBoxValues());
+  };
+  const hanldeGenderChange = (e) => {
+    let newGendervalues = [...gendervalues];
+
+    gendervalues.forEach((gender) => {
+      gender.isChecked = false;
+      if (gender.name === e.target.value) {
+        gender.isChecked = true;
+      }
+    });
+    setgendervalues(newGendervalues);
+    validate()
+    let newUser = { ...user };
+    gendervalues.forEach((gender) => {
+      if (gender.isChecked) {
+        newUser.gender = gender.name;
+      }
+    });
+    setUser(newUser);
+
+    console.log(newGendervalues);
+
+    // setgendervalues(gendervalues.map((gender)=>gender.isChecked?gender.isChecked = false:gender.isChecked = true))
+  };
   return (
     <div>
       <div className="container">
@@ -105,7 +151,9 @@ export const Users = () => {
                           className="form-control"
                           value={email}
                           name="email"
-                          onChange={(e)=>{hanldeChange(e)}}
+                          onChange={(e) => {
+                            hanldeChange(e);
+                          }}
                         />
                       </div>
                       <div className="mb-3" style={{ textAlign: "left" }}>
@@ -120,7 +168,9 @@ export const Users = () => {
                           className="form-control"
                           value={password}
                           name="password"
-                          onChange={(e)=>{hanldeChange(e)}}
+                          onChange={(e) => {
+                            hanldeChange(e);
+                          }}
                         />
                       </div>
                       <div className="mb-3">
@@ -135,7 +185,9 @@ export const Users = () => {
                           className="form-control"
                           value={date}
                           name="date"
-                          onChange={(e)=>{hanldeChange(e)}}
+                          onChange={(e) => {
+                            hanldeChange(e);
+                          }}
                         />
                       </div>
                     </div>
@@ -146,7 +198,9 @@ export const Users = () => {
                           className="form-select"
                           value={state}
                           name="state"
-                          onChange={(e)=>{hanldeChange(e)}}
+                          onChange={(e) => {
+                            hanldeChange(e);
+                          }}
                         >
                           <option selected>Open this select menu</option>
                           <option value="Andhra">Andhra</option>
@@ -158,27 +212,51 @@ export const Users = () => {
                         <label htmlFor="" className="mb-2">
                           Selct Skills
                         </label>
-                        {checkBoxes.map((cb)=><div class="form-check">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            value={cb.name}
-                            checked={cb.isChecked}
-                            onChange={(e)=>{handleCheckChange(e)}}
-                          />
-                          <label
-                            class="form-check-label"
-                            for="flexCheckDefault"
-                          >
-                            {cb.name}
-                          </label>
-                        </div>)}
-                         </div>
+                        {checkBoxes.map((cb) => (
+                          <div class="form-check">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              value={cb.name}
+                              checked={cb.isChecked}
+                              onChange={(e) => {
+                                handleCheckChange(e);
+                              }}
+                            />
+                            <label
+                              class="form-check-label"
+                              for="flexCheckDefault"
+                            >
+                              {cb.name}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
                       <div className="mb-3">
                         <label htmlFor="" className="mb-2">
                           Gender
                         </label>
-                        <div class="form-check">
+                        {gendervalues.map((gender) => (
+                          <div class="form-check">
+                            <input
+                              class="form-check-input"
+                              type="radio"
+                              name="gender"
+                              value={gender.name}
+                              checked={gender.isChecked}
+                              onChange={(e) => {
+                                hanldeGenderChange(e);
+                              }}
+                            />
+                            <label
+                              class="form-check-label"
+                              for="flexRadioDefault1"
+                            >
+                              {gender.name}
+                            </label>
+                          </div>
+                        ))}
+                        {/* <div class="form-check">
                           <input
                             class="form-check-input"
                             type="radio"
@@ -208,6 +286,7 @@ export const Users = () => {
                             Female
                           </label>
                         </div>
+                      </div> */}
                       </div>
                     </div>
                   </div>
@@ -222,7 +301,12 @@ export const Users = () => {
                 >
                   Close
                 </button>
-                <button type="button" className="btn btn-primary" onClick={handleSubmit}>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={handleSubmit}
+                  disabled={isInvalid}
+                >
                   Add User
                 </button>
               </div>
