@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { returnCheckBoxValues, returnGenderValues, returnUser } from "./utils";
 
 export const Users = () => {
@@ -9,6 +9,10 @@ export const Users = () => {
   const [gendervalues, setgendervalues] = useState(returnGenderValues());
   const [isInvalid, setisInvalid] = useState(true)
   let { email, password, state, date, gender, subjects } = user;
+
+  useEffect(()=>{
+    validate()
+  },[user])
   const adduser = () => {
     setshowModal(true);
   };
@@ -40,17 +44,18 @@ export const Users = () => {
   const hanldeChange = (e) => {
     let newUser = { ...user };
     newUser[e.target.name] = e.target.value;
-    validate()
+    
     setUser(newUser);
   };
   const handleCheckChange = (e) => {
+    // TO Update the Checkbox Status
     var allCheckBoxes = [...checkBoxes];
     allCheckBoxes.forEach((cbox) => {
       if (cbox.name === e.target.value) {
-        if (!cbox.isChecked) {
-          cbox.isChecked = true;
-        } else {
+        if (cbox.isChecked) {
           cbox.isChecked = false;
+        } else {
+          cbox.isChecked = true;
         }
       }
     });
@@ -59,12 +64,16 @@ export const Users = () => {
 
     checkBoxes.forEach((e) => {
       if (e.isChecked) {
-        newUser.subjects.push(e.name);
+        if(newUser.subjects.indexOf(e.name) === -1){
+          newUser.subjects.push(e.name);
+        }
+        // newUser.subjects.push(e.name);
+      }else{
+        newUser.subjects = newUser.subjects.filter(subject=>subject !== e.name)
       }
     });
     setUser(newUser);
 
-    validate()
   };
 
   const handleSubmit = () => {
@@ -91,6 +100,7 @@ export const Users = () => {
     //Will Clear Checkbox Values
     setcheckBoxes(returnCheckBoxValues());
   };
+
   const hanldeGenderChange = (e) => {
     let newGendervalues = [...gendervalues];
 
@@ -101,15 +111,15 @@ export const Users = () => {
       }
     });
     setgendervalues(newGendervalues);
-    validate()
+    
     let newUser = { ...user };
     gendervalues.forEach((gender) => {
       if (gender.isChecked) {
         newUser.gender = gender.name;
       }
     });
-    setUser(newUser);
 
+    setUser(newUser);
     console.log(newGendervalues);
 
     // setgendervalues(gendervalues.map((gender)=>gender.isChecked?gender.isChecked = false:gender.isChecked = true))
@@ -185,6 +195,7 @@ export const Users = () => {
                           className="form-control"
                           value={date}
                           name="date"
+                          
                           onChange={(e) => {
                             hanldeChange(e);
                           }}
