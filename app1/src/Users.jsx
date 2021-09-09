@@ -5,14 +5,13 @@ export const Users = () => {
   const [showModal, setshowModal] = useState(false);
   const [user, setUser] = useState(returnUser());
   const [checkBoxes, setcheckBoxes] = useState(returnCheckBoxValues());
-
   const [gendervalues, setgendervalues] = useState(returnGenderValues());
   const [isInvalid, setisInvalid] = useState(true)
   let { email, password, state, date, gender, subjects } = user;
 
   useEffect(()=>{
     validate()
-  },[user])
+  },[user,checkBoxes,gendervalues])
   const adduser = () => {
     setshowModal(true);
   };
@@ -24,12 +23,17 @@ export const Users = () => {
     let newUser = {...user}
 
     for(let a in newUser){
-      if(a !== "subjects"){
+      if(a !== "subjects" && a !== "gender"){
         if(newUser[a]===""){
           valid=false
         }
+      
+      }else if(a === "gender"){
+        if(gendervalues.every((gender)=>gender.isChecked === false)){
+          valid=false
+        }
       }else if(a === "subjects"){
-        if(newUser[a].length === 0){
+        if(checkBoxes.every(subject=>subject.isChecked ===false)){
           valid=false
         }
       }
@@ -60,19 +64,19 @@ export const Users = () => {
       }
     });
     setcheckBoxes(allCheckBoxes);
-    let newUser = { ...user };
+      // let newUser = { ...user };
 
-    checkBoxes.forEach((e) => {
-      if (e.isChecked) {
-        if(newUser.subjects.indexOf(e.name) === -1){
-          newUser.subjects.push(e.name);
-        }
-        // newUser.subjects.push(e.name);
-      }else{
-        newUser.subjects = newUser.subjects.filter(subject=>subject !== e.name)
-      }
-    });
-    setUser(newUser);
+      // checkBoxes.forEach((e) => {
+      //   if (e.isChecked) {
+      //     if(newUser.subjects.indexOf(e.name) === -1){
+      //       newUser.subjects.push(e.name);
+      //     }
+      //     // newUser.subjects.push(e.name);
+      //   }else{
+      //     newUser.subjects = newUser.subjects.filter(subject=>subject !== e.name)
+      //   }
+      // });
+    // setUser(newUser);
 
   };
 
@@ -83,14 +87,14 @@ export const Users = () => {
         newUser.subjects.push(e.name);
       }
     });
-    gendervalues.forEach((gender) => {
-      if (gender.isChecked) {
-        newUser.gender = gender.name;
+    gendervalues.forEach((gen) => {
+      if (gen.isChecked) {
+        newUser.gender = gen.name;
       }
     });
 
-    setUser(newUser);
-    console.log(user);
+    // setUser(newUser);
+    console.log(newUser);
     // Will Clear the form  .. to be triggered after the action
     setUser(returnUser());
 
@@ -112,15 +116,15 @@ export const Users = () => {
     });
     setgendervalues(newGendervalues);
     
-    let newUser = { ...user };
-    gendervalues.forEach((gender) => {
-      if (gender.isChecked) {
-        newUser.gender = gender.name;
-      }
-    });
-
-    setUser(newUser);
-    console.log(newGendervalues);
+    // let newUser = { ...user };
+    // gendervalues.forEach((gender) => {
+    //   if (gender.isChecked) {
+    //     newUser.gender = gender.name;
+    //   }
+    // });
+    // setgendervalues(newGendervalues)
+    // setUser(newUser);
+  
 
     // setgendervalues(gendervalues.map((gender)=>gender.isChecked?gender.isChecked = false:gender.isChecked = true))
   };
