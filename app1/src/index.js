@@ -9,7 +9,9 @@ import { rootReducer } from './reducer';
 import thunk from 'redux-thunk'
 import { productsReducer } from './reducer/productsReduder';
 
-export const reducers = combineReducers({ users:rootReducer,products:productsReducer });
+export const reducers = combineReducers({ 
+  users:rootReducer
+});
 
 export const store = createStore(reducers, applyMiddleware(thunk));
 ReactDOM.render(

@@ -1,4 +1,30 @@
 {
-    "users":[],
+    "users":[{
+        "date": "2021-09-10",
+        "email": "vmurali100@gmail.com",
+        "gender": "Male",
+        "password": "1234",
+        "state": "Andhra",
+        "subjects":["HTML", "CSS"]
+
+    },
+    {
+        "date": "2021-09-10",
+        "email": "murali@gmail.com",
+        "gender": "Male",
+        "password": "1234",
+        "state": "Andhra",
+        "subjects":["Angular", "React"]
+
+    },
+    {
+        "date": "2021-09-10",
+        "email": "vmurali@gmail.com",
+        "gender": "Male",
+        "password": "1234",
+        "state": "Andhra",
+        "subjects":["JS", "CSS"]
+
+    }],
     "products":[]
 }
