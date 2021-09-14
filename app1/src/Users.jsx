@@ -1,22 +1,61 @@
 import React, { useEffect, useState } from "react";
 import { returnCheckBoxValues, returnGenderValues, returnUser } from "./utils";
+import { useSelector, useDispatch } from "react-redux";
+import { addUserAction, showModalAction } from "./actions";
 
 export const Users = () => {
-  const [showModal, setshowModal] = useState(false);
   const [user, setUser] = useState(returnUser());
   const [checkBoxes, setcheckBoxes] = useState(returnCheckBoxValues());
   const [gendervalues, setgendervalues] = useState(returnGenderValues());
   const [isInvalid, setisInvalid] = useState(true)
+
+  const dispatch = useDispatch();
+  const {showModal,selectedUser} = useSelector((state) => state.data);
+  console.log(showModal)
+  console.log(selectedUser)
+  
   let { email, password, state, date, gender, subjects } = user;
 
   useEffect(()=>{
+    if(selectedUser!=={}){
+      setUser(selectedUser)
+    }
     validate()
   },[user,checkBoxes,gendervalues])
+
+  useEffect(()=>{
+    if(Object.values(selectedUser).length > 0){
+      setUser(selectedUser)
+      let newCheckBoxes = [...checkBoxes]
+      if(selectedUser){
+        selectedUser.subjects.forEach((subj)=>{// ["HTML","CSS"]
+          newCheckBoxes.forEach((subject)=>{ //
+            if(subject.name === subj){
+              subject.isChecked = true
+            }
+          })
+        })
+      }
+
+      setcheckBoxes(newCheckBoxes)
+
+      let newGenderValues = [...gendervalues]
+      newGenderValues.forEach((gender)=>{
+        if(gender.name === selectedUser.gender){
+          gender.isChecked=true
+        }
+      })
+      setgendervalues(newGenderValues)
+    }
+  },[selectedUser])
+
   const adduser = () => {
-    setshowModal(true);
+    dispatch(showModalAction(true))
   };
   const closeModal = () => {
-    setshowModal(false);
+
+    dispatch(showModalAction(false))
+    resetValues()
   };
   const validate = () =>{
     let valid = true
@@ -92,10 +131,15 @@ export const Users = () => {
         newUser.gender = gen.name;
       }
     });
-
+    dispatch(addUserAction(user))
+ 
     // setUser(newUser);
     console.log(newUser);
     // Will Clear the form  .. to be triggered after the action
+    
+  };
+
+  const resetValues =()=>{
     setUser(returnUser());
 
     // Will Clear the Gender values
@@ -103,8 +147,7 @@ export const Users = () => {
 
     //Will Clear Checkbox Values
     setcheckBoxes(returnCheckBoxValues());
-  };
-
+  }
   const hanldeGenderChange = (e) => {
     let newGendervalues = [...gendervalues];
 

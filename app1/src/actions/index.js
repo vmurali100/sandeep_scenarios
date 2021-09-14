@@ -1,8 +1,31 @@
 import axios from "axios";
-let apiUrl = "http://localhost:3000/users";
-export const addUserAction = (users) => {};
+let apiUrl = "http://localhost:3000/users/";
 
-export const removeUserAction = () => {};
+export const handleEditAction=(user)=>{
+  return {
+    type: "EDITUSER",
+    payload: user,
+}
+}
+export const showModalAction = (val)=>{
+  return {
+        type: "SHOWMODAL",
+        payload: val,
+    }
+}
+export const addUserAction = (user) => {
+  return async (dispatch)=>{
+    let addUser = await axios.post(apiUrl,user)
+    dispatch(getAllUsersAction())
+  }
+};
+
+export const removeUserAction = (user) => {
+  return async (dispatch)=>{
+    let delUser = await axios.delete(apiUrl+user.id)
+    dispatch(getAllUsersAction())
+  }
+};
 
 export const getAllUsersAction =  () => {
   return async (dispatch)=>{
@@ -13,9 +36,7 @@ export const getAllUsersAction =  () => {
         payload: allUsers.data,
     })
   }
-//   console.log(allUsers)
-//   return {
-    // type: "GETALLUSERS",
-    // payload: allUsers,
-//   };
+
 };
+
+

@@ -1,17 +1,28 @@
 import React, { useEffect } from "react";
-import { useSelector,useDispatch } from 'react-redux'
-import { getAllUsersAction } from "./actions";
+import { useSelector, useDispatch } from "react-redux";
+import { getAllUsersAction, handleEditAction, removeUserAction, showModalAction } from "./actions";
 
 export const Dashboard = () => {
-  const users = useSelector(state => state.users);
-  console.log(users)
-  const dispatch = useDispatch()
-  const getAllUsers = ()=>{
-    dispatch(getAllUsersAction())
+  const {users} = useSelector((state) => state.data);
+  const dispatch = useDispatch();
+  const getAllUsers = () => {
+    dispatch(getAllUsersAction());
+  };
+  useEffect(() => {
+    getAllUsers();
+  }, []);
+
+  const handleEdit=(user)=>{
+    dispatch(showModalAction(true))
+    dispatch(handleEditAction(user))
+    console.log(user)
   }
-  useEffect(()=>{
-    getAllUsers()
-  },[])
+
+  const handleDelete=(user)=>{
+    console.log(user)
+    dispatch(removeUserAction(user))
+  }
+
   return (
     <div>
       <div className="container-fluid">
@@ -131,16 +142,34 @@ export const Dashboard = () => {
               <table className="table table-striped table-sm">
                 <thead>
                   <tr>
-                    <th>#</th>
+                  <th>Date</th>
                     <th>Email</th>
-                    <th>Password</th>
-                    <th>Date</th>
-                    <th>State</th>
                     <th>Gender</th>
+
+                    <th>Password</th>
+                    <th>State</th>
                     <th>Skills</th>
+                    <th>Id</th>
+                    <td>Edit</td>
+                    <td>Delete</td>
                   </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody>
+                  {users &&
+                    users.map((user, i) => (
+                      <tr>
+                        {Object.values(user).map((val) => (
+                          <td>{val}</td>
+                        ))}
+                        <td>
+                          <button className="btn btn-primary" onClick={()=>{handleEdit(user)}}>Edit</button>
+                        </td>
+                        <td>
+                          <button className="btn btn-danger" onClick={()=>{handleDelete(user)}}>Delete</button>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
               </table>
             </div>
           </main>

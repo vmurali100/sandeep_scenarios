@@ -7,10 +7,9 @@ import {applyMiddleware, createStore,combineReducers} from 'redux';
 import {Provider} from 'react-redux'
 import { rootReducer } from './reducer';
 import thunk from 'redux-thunk'
-import { productsReducer } from './reducer/productsReduder';
 
 export const reducers = combineReducers({ 
-  users:rootReducer
+  data:rootReducer
 });
 
 export const store = createStore(reducers, applyMiddleware(thunk));
