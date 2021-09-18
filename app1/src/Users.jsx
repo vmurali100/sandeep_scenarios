@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { returnCheckBoxValues, returnGenderValues, returnUser } from "./utils";
 import { useSelector, useDispatch } from "react-redux";
-import { addUserAction, showModalAction } from "./actions";
+import { addUserAction, handleUpdateAction, isEditAction, showModalAction } from "./actions";
 
 export const Users = () => {
   const [user, setUser] = useState(returnUser());
@@ -10,18 +10,19 @@ export const Users = () => {
   const [isInvalid, setisInvalid] = useState(true)
 
   const dispatch = useDispatch();
-  const {showModal,selectedUser} = useSelector((state) => state.data);
+  const {showModal,selectedUser,isEdit} = useSelector((state) => state.data);
   console.log(showModal)
   console.log(selectedUser)
-  
+  console.log(user)
   let { email, password, state, date, gender, subjects } = user;
 
+  // Will excute Only Once when Component Renders
   useEffect(()=>{
-    if(selectedUser!=={}){
+    if(isEdit){
       setUser(selectedUser)
     }
     validate()
-  },[user,checkBoxes,gendervalues])
+  },[])
 
   useEffect(()=>{
     if(Object.values(selectedUser).length > 0){
@@ -50,10 +51,11 @@ export const Users = () => {
   },[selectedUser])
 
   const adduser = () => {
+    resetValues()
     dispatch(showModalAction(true))
   };
   const closeModal = () => {
-
+    dispatch(isEditAction(false))
     dispatch(showModalAction(false))
     resetValues()
   };
@@ -119,11 +121,15 @@ export const Users = () => {
 
   };
 
-  const handleSubmit = () => {
-    let newUser = { ...user };
+  const captureCheckRadiovalues = (newUser)=>{
+    newUser.subjects=[]
     checkBoxes.forEach((e) => {
       if (e.isChecked) {
-        newUser.subjects.push(e.name);
+        if(newUser.subjects.indexOf(e.name) == -1){
+          newUser.subjects.push(e.name);
+        }else{
+          newUser.subjects.splice(newUser.subjects.indexOf(e.name),1)
+        }
       }
     });
     gendervalues.forEach((gen) => {
@@ -131,8 +137,13 @@ export const Users = () => {
         newUser.gender = gen.name;
       }
     });
-    dispatch(addUserAction(user))
- 
+
+    return newUser
+  }
+  const handleSubmit = () => {
+    let newUser = { ...user };
+    newUser = captureCheckRadiovalues(newUser)
+    dispatch(addUserAction(newUser))
     // setUser(newUser);
     console.log(newUser);
     // Will Clear the form  .. to be triggered after the action
@@ -141,10 +152,8 @@ export const Users = () => {
 
   const resetValues =()=>{
     setUser(returnUser());
-
     // Will Clear the Gender values
     setgendervalues(returnGenderValues());
-
     //Will Clear Checkbox Values
     setcheckBoxes(returnCheckBoxValues());
   }
@@ -171,6 +180,14 @@ export const Users = () => {
 
     // setgendervalues(gendervalues.map((gender)=>gender.isChecked?gender.isChecked = false:gender.isChecked = true))
   };
+
+  const handleUpdate =()=>{
+    let newUser = { ...user };
+
+    newUser = captureCheckRadiovalues(newUser)
+    
+    dispatch(handleUpdateAction(newUser))
+  }
   return (
     <div>
       <div className="container">
@@ -359,14 +376,21 @@ export const Users = () => {
                 >
                   Close
                 </button>
-                <button
+                
+                {isEdit ? <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={handleUpdate}
+                >
+                  Update User
+                </button>:<button
                   type="button"
                   className="btn btn-primary"
                   onClick={handleSubmit}
                   disabled={isInvalid}
                 >
                   Add User
-                </button>
+                </button>}
               </div>
             </div>
           </div>

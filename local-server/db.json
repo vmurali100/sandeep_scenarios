@@ -23,6 +23,78 @@
         "Javascript"
       ],
       "id": 2
+    },
+    {
+      "email": "vmurali100@gmail.com",
+      "password": "123",
+      "state": "Tamilnadu",
+      "date": "2021-09-19",
+      "gender": "",
+      "subjects": [
+        "HTML",
+        "Javascript"
+      ],
+      "id": 3
+    },
+    {
+      "email": "vmurali100@gmail.com",
+      "password": "1123",
+      "state": "Andhra",
+      "date": "2021-09-17",
+      "gender": "Male",
+      "subjects": [
+        "HTML",
+        "CSS"
+      ],
+      "id": 4
+    },
+    {
+      "email": "sandeep_ss@gmail.com",
+      "password": "1234",
+      "state": "Tamilnadu",
+      "date": "2021-09-19",
+      "gender": "Male",
+      "subjects": [
+        "HTML",
+        "CSS"
+      ],
+      "id": 5
+    },
+    {
+      "email": "vmurali101@gmail.com",
+      "password": "123",
+      "state": "Tamilnadu",
+      "date": "2021-10-01",
+      "gender": "Male",
+      "subjects": [
+        "Javascript",
+        "ReactJS"
+      ],
+      "id": 6
+    },
+    {
+      "email": "ramkrishna@gmail.com",
+      "password": "asss",
+      "state": "Tamilnadu",
+      "date": "2021-09-25",
+      "gender": "Male",
+      "subjects": [
+        "HTML",
+        "CSS"
+      ],
+      "id": 7
+    },
+    {
+      "email": "vmurali100@gmail.com",
+      "password": "123",
+      "state": "Tamilnadu",
+      "date": "2021-09-17",
+      "gender": "Female",
+      "subjects": [
+        "HTML",
+        "CSS"
+      ],
+      "id": 8
     }
   ],
   "products": []

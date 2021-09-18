@@ -1,10 +1,10 @@
 import axios from "axios";
 let apiUrl = "http://localhost:3000/users/";
 
-export const handleEditAction=(user)=>{
+export const handleEditAction=(userObj)=>{
   return {
     type: "EDITUSER",
-    payload: user,
+    payload: userObj,
 }
 }
 export const showModalAction = (val)=>{
@@ -38,5 +38,19 @@ export const getAllUsersAction =  () => {
   }
 
 };
+
+export const isEditAction =(val)=>{
+  return {
+    type: "ISEDIT",
+    payload: val,
+}
+}
+
+export const handleUpdateAction = (user)=>{
+  return async (dispatch)=>{
+    let addUser = await axios.put(`${apiUrl+user.id}`,user)
+    dispatch(getAllUsersAction())
+  }
+}
 
 

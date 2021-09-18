@@ -13,9 +13,10 @@ export const Dashboard = () => {
   }, []);
 
   const handleEdit=(user)=>{
-    dispatch(showModalAction(true))
-    dispatch(handleEditAction(user))
-    console.log(user)
+    let editUser = {user};
+    editUser['showModal'] = true; 
+    editUser['isEdit'] = true
+    dispatch(handleEditAction(editUser))
   }
 
   const handleDelete=(user)=>{
