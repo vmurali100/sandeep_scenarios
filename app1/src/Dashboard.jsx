@@ -4,7 +4,7 @@ import { getAllUsersAction, handleEditAction, removeUserAction, showModalAction 
 import { SideNav } from "./SideNav";
 
 export const Dashboard = () => {
-  const {users} = useSelector((state) => state.data);
+  const {users,filteredData} = useSelector((state) => state.data);
   const dispatch = useDispatch();
   const getAllUsers = () => {
     dispatch(getAllUsersAction());
@@ -75,7 +75,7 @@ export const Dashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {users &&
+                  {users && filteredData.length == 0 ?
                     users.map((user, i) => (
                       <tr>
                         {Object.values(user).map((val) => (
@@ -88,7 +88,18 @@ export const Dashboard = () => {
                           <button className="btn btn-danger" onClick={()=>{handleDelete(user)}}>Delete</button>
                         </td>
                       </tr>
+                    )):filteredData.map((fuser)=><tr>
+                    {Object.values(fuser).map((val) => (
+                      <td>{val}</td>
                     ))}
+                    <td>
+                      <button className="btn btn-primary" onClick={()=>{handleEdit(fuser)}}>Edit</button>
+                    </td>
+                    <td>
+                      <button className="btn btn-danger" onClick={()=>{handleDelete(fuser)}}>Delete</button>
+                    </td>
+                  </tr>)
+                    }
                 </tbody>
               </table>
             </div>
