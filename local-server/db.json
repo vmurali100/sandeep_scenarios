@@ -13,30 +13,6 @@
       "id": 1
     },
     {
-      "email": "leelavathikm1@gmail.com",
-      "password": "12",
-      "state": "Telangana",
-      "date": "2021-09-23",
-      "gender": "",
-      "subjects": [
-        "CSS",
-        "Javascript"
-      ],
-      "id": 2
-    },
-    {
-      "email": "vmurali100@gmail.com",
-      "password": "123",
-      "state": "Tamilnadu",
-      "date": "2021-09-19",
-      "gender": "",
-      "subjects": [
-        "HTML",
-        "Javascript"
-      ],
-      "id": 3
-    },
-    {
       "email": "vmurali100@gmail.com",
       "password": "1123",
       "state": "Andhra",
@@ -55,22 +31,10 @@
       "date": "2021-09-19",
       "gender": "Male",
       "subjects": [
-        "HTML",
-        "CSS"
-      ],
-      "id": 5
-    },
-    {
-      "email": "vmurali101@gmail.com",
-      "password": "123",
-      "state": "Tamilnadu",
-      "date": "2021-10-01",
-      "gender": "Male",
-      "subjects": [
-        "Javascript",
+        "CSS",
         "ReactJS"
       ],
-      "id": 6
+      "id": 5
     },
     {
       "email": "ramkrishna@gmail.com",

@@ -56,7 +56,13 @@ export const handleUpdateAction = (user) => {
 export const handleFilterAction=(users)=>{
   return {
     type:"FITER_DATA",
-    payload:users
-  }
+    payload:users,
+    }
 }
 
+export const clearCheckSearchAction=()=>{
+  return {
+    type:"CLEAR_FITER_DATA",
+    payload:false
+  }
+}

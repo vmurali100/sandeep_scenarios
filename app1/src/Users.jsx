@@ -11,9 +11,6 @@ export const Users = () => {
 
   const dispatch = useDispatch();
   const {showModal,selectedUser,isEdit} = useSelector((state) => state.data);
-  console.log(showModal)
-  console.log(selectedUser)
-  console.log(user)
   let { email, password, state, date, gender, subjects } = user;
 
   // Will excute Only Once when Component Renders

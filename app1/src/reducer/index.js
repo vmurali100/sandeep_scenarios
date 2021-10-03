@@ -5,7 +5,8 @@ const initialState={
     selectedUser:returnUser(),
     showModal:false,
     isEdit:false,
-    filteredData:[]
+    filteredData:[],
+    isFilter:false
 }
 export const rootReducer=(state=initialState,action)=>{
     switch (action.type) {
@@ -32,7 +33,14 @@ export const rootReducer=(state=initialState,action)=>{
             }
         case "FITER_DATA":
             return {
-                ...state,filteredData:action.payload
+                ...state,
+                filteredData:action.payload,
+                isFilter:true
+            }
+        case "CLEAR_FITER_DATA":
+            return {
+                ...state,
+                isFilter:action.payload,
             }
         default:
             return state

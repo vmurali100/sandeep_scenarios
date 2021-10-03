@@ -22,3 +22,10 @@ export const returnUser=()=>{
       {name:"Javascript",isChecked:false},
       {name:"ReactJS",isChecked:false}]
   }
+
+  export const returnDateValus = ()=>{
+    return {
+      startDate:"",
+      endDate:""
+    }
+  }

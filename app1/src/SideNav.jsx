@@ -1,15 +1,16 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react'
-import { returnCheckBoxValues } from './utils';
+import { returnCheckBoxValues, returnDateValus } from './utils';
 import { useSelector, useDispatch } from "react-redux";
-import { handleFilterAction } from './actions';
+import { clearCheckSearchAction, handleFilterAction } from './actions';
 
 
 export const SideNav = () => {
   const [allCheckBoxes, setallCheckBoxes] = useState(returnCheckBoxValues())
   const { users } = useSelector((state) => state.data);
   const [autoSearch,setAutoSearch]= useState([])
-  const [searchText ,setSearchText] = useState("")
+  const [searchText ,setSearchText] = useState("");
+  const [dateObj, setdateObj] = useState(returnDateValus())
   const dispatch = useDispatch();
 
   const handleCheckSelection = (e) => {
@@ -20,7 +21,19 @@ export const SideNav = () => {
       }
     })
     setallCheckBoxes(newCheckboxes)
+
+    // Scenario 1
+    // if(getCheckedValues(newCheckboxes).length > 0){
+    //   dispatch(handleFilterAction(getCheckedValues(newCheckboxes)))
+    // }else{
+    //   dispatch(clearCheckSearchAction())
+    // }
+
     dispatch(handleFilterAction(getCheckedValues(newCheckboxes)))
+    // if(getCheckedValues(newCheckboxes).length == 0){
+    //   dispatch(clearCheckSearchAction())
+    // }
+    
   }
 
   const getAllSeletedData = (filters)=>{
@@ -87,6 +100,26 @@ export const SideNav = () => {
     setSearchText(searhString)
     dispatch(handleFilterAction(getAllSeletedData([searhString])))
   }
+
+  const handleDateSearch =()=>{
+    let allUsers = [...users]
+    let compareData = allUsers.filter(user=>user.date >= dateObj.startDate && user.date <= dateObj.endDate)
+    dispatch(handleFilterAction(compareData))
+
+  }
+
+  const handleDateChange = (e)=>{
+    console.log(e.target.value);
+    let dateInfo = {...dateObj};
+    dateInfo[e.target.name] = e.target.value
+    setdateObj(dateInfo)
+  }
+
+  const hanldeClearSearch =()=>{
+    let allUsers = [...users]
+    dispatch(handleFilterAction(allUsers))
+    setdateObj(returnDateValus())
+    }
   return (
     <div>
       <nav
@@ -104,6 +137,17 @@ export const SideNav = () => {
             
             </li>)}
         </ul>
+        <hr />
+        <label htmlFor="">Start Date : </label>
+        <input type="date" name="startDate" value={dateObj.startDate} onChange={(e)=>{handleDateChange(e)}} />
+        <br />
+        <br />
+        <label htmlFor="">End Data : </label>
+        <input type="date" name="endDate" value={dateObj.endDate} onChange={(e)=>{handleDateChange(e)}} />
+
+        <hr />
+        <button onClick={handleDateSearch}>Search</button>
+        <button onClick={hanldeClearSearch}>Clear Search</button>
           <ul className="nav flex-column">
             <li className="nav-item">
               <a className="nav-link active" aria-current="page" href="#">
@@ -155,7 +199,7 @@ export const SideNav = () => {
               </a>
             </li>
           </ul>
-
+<hr />
           <h6 className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
             <span>Saved reports</span>
             <a

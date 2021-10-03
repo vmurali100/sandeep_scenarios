@@ -4,7 +4,8 @@ import { getAllUsersAction, handleEditAction, removeUserAction, showModalAction 
 import { SideNav } from "./SideNav";
 
 export const Dashboard = () => {
-  const {users,filteredData} = useSelector((state) => state.data);
+  const {users,filteredData,isFilter} = useSelector((state) => state.data);
+  console.log(isFilter);
   const dispatch = useDispatch();
   const getAllUsers = () => {
     dispatch(getAllUsersAction());
@@ -62,12 +63,13 @@ export const Dashboard = () => {
               <table className="table table-striped table-sm">
                 <thead>
                   <tr>
-                  <th>Date</th>
                     <th>Email</th>
-                    <th>Gender</th>
-
                     <th>Password</th>
                     <th>State</th>
+
+                    <th>Date</th>
+                    <th>Gender</th>
+
                     <th>Skills</th>
                     <th>Id</th>
                     <td>Edit</td>
@@ -75,7 +77,7 @@ export const Dashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {users && filteredData.length == 0 ?
+                  {users && !isFilter ?
                     users.map((user, i) => (
                       <tr>
                         {Object.values(user).map((val) => (
