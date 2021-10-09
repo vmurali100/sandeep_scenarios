@@ -20,3 +20,7 @@ code {
   margin-bottom: 1px;
   cursor: pointer;
 }
+.pageActive{
+  background: grey;
+  color: white;
+}

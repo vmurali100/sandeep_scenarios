@@ -6,7 +6,10 @@ const initialState={
     showModal:false,
     isEdit:false,
     filteredData:[],
-    isFilter:false
+    isFilter:false,
+    noOfPages:1,
+    noOfRecords:5,
+    pageNo :1
 }
 export const rootReducer=(state=initialState,action)=>{
     switch (action.type) {
@@ -17,7 +20,12 @@ export const rootReducer=(state=initialState,action)=>{
             return state.users.filter((user)=>user.fname!==action.payload)
 
         case "GETALLUSERS":
-            return {...state,users:action.payload,showModal:false}
+            console.log("action.payload",action.payload)
+            return {...state,
+                users:action.payload,
+                showModal:false,
+                noOfPages:Math.ceil(action.payload.length/initialState.noOfRecords)
+            }
 
         case "SHOWMODAL":
             return {...state,showModal:action.payload}
@@ -41,6 +49,11 @@ export const rootReducer=(state=initialState,action)=>{
             return {
                 ...state,
                 isFilter:action.payload,
+            }
+        case "PAGINATION":
+            return {
+                ...state,
+                pageNo:action.payload
             }
         default:
             return state

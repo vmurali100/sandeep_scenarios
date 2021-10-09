@@ -1,11 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getAllUsersAction, handleEditAction, removeUserAction, showModalAction } from "./actions";
+import {
+  getAllUsersAction,
+  handleEditAction,
+  handleFilterAction,
+  pagenationAction,
+  removeUserAction,
+  showModalAction,
+} from "./actions";
 import { SideNav } from "./SideNav";
 
 export const Dashboard = () => {
-  const {users,filteredData,isFilter} = useSelector((state) => state.data);
-  console.log(isFilter);
+  const { users, filteredData, isFilter,noOfPages,noOfRecords,pageNo } = useSelector((state) => state.data);
+  console.log(noOfRecords);
+  console.log(noOfPages);
   const dispatch = useDispatch();
   const getAllUsers = () => {
     dispatch(getAllUsersAction());
@@ -14,23 +22,40 @@ export const Dashboard = () => {
     getAllUsers();
   }, []);
 
-  const handleEdit=(user)=>{
-    let editUser = {user};
-    editUser['showModal'] = true; 
-    editUser['isEdit'] = true
-    dispatch(handleEditAction(editUser))
+
+  const handleEdit = (user) => {
+    let editUser = { user };
+    editUser["showModal"] = true;
+    editUser["isEdit"] = true;
+    dispatch(handleEditAction(editUser));
+  };
+
+  const handleDelete = (user) => {
+    dispatch(removeUserAction(user));
+  };
+
+  const gotoPage=(page)=>{
+    let allUsers = users.slice((page*noOfRecords-noOfRecords),page*noOfRecords)
+    dispatch(handleFilterAction(allUsers))
+    dispatch(pagenationAction(page))
   }
 
-  const handleDelete=(user)=>{
-    console.log(user)
-    dispatch(removeUserAction(user))
+  const getPageNos=()=>{
+    let i=1
+    let pages =[]
+    while (i<=noOfPages) {
+       pages.push(i)
+       i++
+    }
+    return pages.map((page)=> <li className="page-item"><a href="#" className={`page-link ${pageNo==page ? 'pageActive':''}`} onClick={()=>{gotoPage(page)}}>{page}</a></li> )
   }
+
 
   return (
     <div>
       <div className="container-fluid">
         <div className="row">
-          <SideNav/>
+          <SideNav />
           <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
               <h1 className="h2">Dashboard</h1>
@@ -77,33 +102,77 @@ export const Dashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {users && !isFilter ?
-                    users.map((user, i) => (
+                  {users && !isFilter
+                    ? users.map((user, i) => i < noOfRecords && (
                       <tr>
                         {Object.values(user).map((val) => (
                           <td>{val}</td>
                         ))}
                         <td>
-                          <button className="btn btn-primary" onClick={()=>{handleEdit(user)}}>Edit</button>
+                          <button
+                            className="btn btn-primary"
+                            onClick={() => {
+                              handleEdit(user);
+                            }}
+                          >
+                            Edit
+                          </button>
                         </td>
                         <td>
-                          <button className="btn btn-danger" onClick={()=>{handleDelete(user)}}>Delete</button>
+                          <button
+                            className="btn btn-danger"
+                            onClick={() => {
+                              handleDelete(user);
+                            }}
+                          >
+                            Delete
+                          </button>
                         </td>
                       </tr>
-                    )):filteredData.map((fuser)=><tr>
-                    {Object.values(fuser).map((val) => (
-                      <td>{val}</td>
-                    ))}
-                    <td>
-                      <button className="btn btn-primary" onClick={()=>{handleEdit(fuser)}}>Edit</button>
-                    </td>
-                    <td>
-                      <button className="btn btn-danger" onClick={()=>{handleDelete(fuser)}}>Delete</button>
-                    </td>
-                  </tr>)
-                    }
+                    ))
+                    : filteredData.map((fuser) => (
+                        <tr>
+                          {Object.values(fuser).map((val) => (
+                            <td>{val}</td>
+                          ))}
+                          <td>
+                            <button
+                              className="btn btn-primary"
+                              onClick={() => {
+                                handleEdit(fuser);
+                              }}
+                            >
+                              Edit
+                            </button>
+                          </td>
+                          <td>
+                            <button
+                              className="btn btn-danger"
+                              onClick={() => {
+                                handleDelete(fuser);
+                              }}
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
                 </tbody>
               </table>
+              <nav aria-label="Page navigation example">
+                <ul className="pagination">
+                  <li className="page-item">
+                   
+                    <button className="page-link" disabled={pageNo==1} onClick={()=>{gotoPage(pageNo-1)}}>Previous</button>
+                  </li>
+                  {getPageNos()}
+                  <li className="page-item">
+                  <button className={`page-link ${pageNo == noOfPages ? 'disabled':''}`} disabled={pageNo == noOfPages} onClick={()=>{gotoPage(pageNo+1)}}>Next</button>
+
+                   
+                  </li>
+                </ul>
+              </nav>
             </div>
           </main>
         </div>

@@ -384,7 +384,6 @@ export const Users = () => {
                   type="button"
                   className="btn btn-primary"
                   onClick={handleSubmit}
-                  disabled={isInvalid}
                 >
                   Add User
                 </button>}

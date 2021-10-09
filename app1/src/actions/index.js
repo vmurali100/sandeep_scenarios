@@ -66,3 +66,9 @@ export const clearCheckSearchAction=()=>{
     payload:false
   }
 }
+export const pagenationAction=(page)=>{
+  return {
+    type:"PAGINATION",
+    payload:page
+  }
+}
